@@ -11,13 +11,11 @@ interface Movie {
 }
 
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
 export default async function MoviePage({ params }: PageProps) {
-  const movieId = params.id;
+  const { id: movieId } = await params;
 
   if (!movieId) {
     return <p className="text-center text-red-500">Invalid Movie ID</p>;
@@ -32,6 +30,8 @@ export default async function MoviePage({ params }: PageProps) {
   );
 
   if (!res.ok) {
+    const errorDetails = await res.json().catch(() => ({}));
+    console.error("Failed to fetch movie details", res.status, errorDetails);
     throw new Error("Failed to fetch movie details");
   }
 
@@ -56,19 +56,21 @@ export default async function MoviePage({ params }: PageProps) {
         )}
         <div className="p-2">
           <h2 className="text-lg mb-3 font-bold">{movie.title || "Untitled"}</h2>
-          <p className="text-lg mb-3">{movie.overview || "No overview available."}</p>
+          <p className="text-lg mb-3">
+            {movie.overview || "No overview available."}
+          </p>
           <p className="mb-3">
             <span className="font-semibold mr-1">Date Released:</span>
             {movie.release_date || "N/A"}
           </p>
           <p className="mb-3">
             <span className="font-semibold mr-1">Rating:</span>
-            {movie.vote_average ? `${movie.vote_average} (${movie.vote_count} votes)` : "No rating"}
+            {movie.vote_average
+              ? `${movie.vote_average} (${movie.vote_count} votes)`
+              : "No rating"}
           </p>
         </div>
       </div>
     </div>
   );
 }
-
-

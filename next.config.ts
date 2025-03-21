@@ -2,9 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["image.tmdb.org"], // ✅ Allow TMDB images
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+      },
+    ],
   },
-  /* config options here */
 };
 
 export default nextConfig;

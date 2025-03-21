@@ -5,5 +5,7 @@ export default function Home({
 }: {
   searchParams: Record<string, string | undefined>;
 }) {
-  return <FetchMovies searchParams={searchParams} />;
+  const searchParamsPromise = Promise.resolve(searchParams);
+
+  return <FetchMovies searchParams={searchParamsPromise} />;
 } 
