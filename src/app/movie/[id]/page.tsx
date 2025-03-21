@@ -32,7 +32,11 @@ export default async function MoviePage({ params }: PageProps) {
   if (!res.ok) {
     const errorDetails = await res.json().catch(() => ({}));
     console.error("Failed to fetch movie details", res.status, errorDetails);
-    throw new Error("Failed to fetch movie details");
+    return(
+    <div>
+      <p> Try.. after some time</p>
+    </div>
+    );
   }
 
   const movie: Movie = await res.json();
